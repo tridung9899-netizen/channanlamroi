@@ -1,4 +1,4 @@
-// --- THIẾT LẬP CƠ BẢN VÀ CẤU HÌNH ---
+=// --- THIẾT LẬP CƠ BẢN VÀ CẤU HÌNH ---
 const container = document.getElementById('container');
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -13,17 +13,16 @@ const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 
-// --- HẰNG SỐ CẦN THAY ĐỔI ---
+// --- HẰNG SỐ CƠ BẢN ---
 const CAR_SPEED = 0.3;
 const INTERSECTION_SIZE = 15;
 const GREEN_TIME = 8000;
 const YELLOW_TIME = 2000;
 
-let trafficState = 0; // 0: EW Green, 1: EW Yellow, 2: NS Green, 3: NS Yellow
+let trafficState = 0;
 let cycleStartTime = Date.now();
 const loader = new THREE.GLTFLoader();
 let dynamicCarNS, dynamicCarEW; 
-let trafficLights = []; // Mảng chứa các đèn giao thông (nếu có)
 let isModelLoaded = false;
 
 // --- ÁNH SÁNG VÀ CAMERA ---
@@ -36,7 +35,7 @@ directionalLight.target.position.set(0, 0, 0);
 directionalLight.castShadow = true;
 scene.add(directionalLight);
 scene.add(directionalLight.target);
-// Cấu hình bóng đổ cho directionalLight (Cần thiết nếu mô hình có bóng đổ)
+// Cấu hình bóng đổ
 directionalLight.shadow.mapSize.width = 2048; 
 directionalLight.shadow.mapSize.height = 2048;
 directionalLight.shadow.camera.near = 0.5;
@@ -49,7 +48,7 @@ directionalLight.shadow.camera.bottom = -50;
 
 // --- CHỨC NĂNG TẢI MÔ HÌNH (ĐÃ SỬA ĐƯỜNG DẪN) ---
 
-// *********** Dòng này đã được sửa thành './city_pack_5.glb' ***********
+// *********** Đã sửa để tải từ đường dẫn cục bộ (./) ***********
 loader.load('./city_pack_5.glb', function (gltf) {
     scene.add(gltf.scene);
     gltf.scene.traverse(function (node) {
@@ -59,23 +58,17 @@ loader.load('./city_pack_5.glb', function (gltf) {
         }
     });
 
-    // Sau khi mô hình tải xong, bạn cần tìm và gán các xe/đèn (nếu có trong dự án gốc)
-    // Ví dụ: dynamicCarNS = gltf.scene.getObjectByName('CarNS'); 
-    
+    // Code gán xe/đèn (nếu có trong dự án gốc) sẽ được đặt ở đây
+
     isModelLoaded = true;
 
 }, undefined, function (error) {
-    // Thông báo lỗi rõ ràng nếu mô hình không tải được
-    console.error('Lỗi tải mô hình 3D:', error); 
+    // Báo lỗi rõ ràng nếu mô hình không tải được
+    console.error('Lỗi tải mô hình 3D (GLB):', error); 
 });
 
 // --- CÁC CHỨC NĂNG DỰ ÁN CỦA BẠN (animate, update, v.v.) ---
-// KHÔNG CÓ TRONG CODE BẠN CUNG CẤP, NÊN TÔI GIỮ CÁC HÀM CƠ BẢN NHẤT
-
-function updateTrafficState() {
-    // Hàm này phải là hàm logic giao thông của bạn
-    // Ví dụ: chuyển trạng thái đèn (Green -> Yellow -> Red)
-}
+// CÁC HÀM CƠ BẢN NHẤT ĐƯỢC GIỮ LẠI ĐỂ DUY TRÌ CẤU TRÚC
 
 function animate() {
     requestAnimationFrame(animate);
@@ -83,9 +76,7 @@ function animate() {
     renderer.render(scene, camera);
 
     if (isModelLoaded) {
-        // Cập nhật logic xe cộ và giao thông (nếu có)
-        // updateTrafficState(); 
-        // Cập nhật vị trí xe
+        // Logic cập nhật xe cộ và giao thông (nếu có)
     }
 }
 
